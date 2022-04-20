@@ -1,0 +1,22 @@
+html,
+body {
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+header a, header a:hover {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+#loader {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  background: #000000bf url(/images/spinner.gif) no-repeat center center;
+  z-index: 10000;
+}

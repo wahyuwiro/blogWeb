@@ -1,0 +1,76 @@
+{{>nav}}
+<header class="masthead" style="background-image: url('assets/img/home-bg.jpg')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>Sign in</h1>
+                    <span class="subheading">New user? <a href="{{ host }}/signup">Create an account</a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<main class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                {{!-- <p>Want to get in touch? Fill out the form below to send me a message and I will get back to you as soon as possible!</p> --}}
+                <div class="my-5">
+                    <form id="signinForm" method="post" action="{{ host }}/signin">
+                        <div class="form-floating">
+                            <input class="form-control" id="email" name="email" type="email" placeholder="Enter your email..." data-sb-validations="required,email" />
+                            <label for="email">Email address</label>
+                            <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
+                            <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
+                        </div>
+                        <div class="form-floating">
+                            <input class="form-control" id="password" name="password" type="password" placeholder="Enter your password..." data-sb-validations="required" />
+                            <label for="password">Password</label>
+                            <div class="invalid-feedback" data-sb-feedback="password:required">A password is required.</div>
+                        </div>
+                        <br />
+                        <div class="d-none" id="submitSuccessMessage">
+                            <div class="text-center mb-3">
+                                <div class="fw-bolder">Form submission successful!</div>
+                                To activate this form, sign up at
+                            </div>
+                        </div>
+                        <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">{{ err }}</div></div>
+                        <!-- Submit Button-->
+                        <button class="btn btn-primary text-uppercase spinner" id="submitButton" type="submit">Submit</button>
+                    </form>                    
+                    {{!-- <form id="siginForm" data-sb-form-api-token="API_TOKEN" method="post" action="{{ host }}/signin">
+                        <div class="form-floating">
+                            <input class="form-control" id="email" type="email" placeholder="Enter your email..." data-sb-validations="required,email" />
+                            <label for="email">Email address</label>
+                            <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
+                            <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
+                        </div>
+                        <div class="form-floating">
+                            <input class="form-control" id="password" type="password" placeholder="Enter your password..." data-sb-validations="required" />
+                            <label for="password">Password</label>
+                            <div class="invalid-feedback" data-sb-feedback="password:required">A password is required.</div>
+                        </div>
+                        <br />
+                        <div class="d-none" id="submitSuccessMessage">
+                            <div class="text-center mb-3">
+                                <div class="fw-bolder">Form submission successful!</div>
+                                To activate this form, sign up at
+                            </div>
+                        </div>
+                        <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+                        <!-- Submit Button-->
+                        <button class="btn btn-primary text-uppercase disabled spinner" id="submitButton" type="submit">Submit</button>
+                    </form> --}}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{{>footer}}
+<script>
+    $(document).ready(function () {
+        spinner.hide();
+    })
+</script>

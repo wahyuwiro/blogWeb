@@ -13,12 +13,20 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
-  // async getHome(params: any): Promise < Observable < AxiosResponse < any >>> {    
-  //   return this.http.get('https://imdb-api.com/API/AdvancedSearch/'+ process.env.APIKEY +'/?genres=action,adventure', { headers: {} })
-  //   .pipe(map((res) => {
-  //       return res.data;
-  //   })).toPromise();   
-  // }
+  async getArticle(params: any): Promise < Observable < AxiosResponse < any >>> {
+    var headers: any = {};
+    headers = {
+        'Content-Type': 'application/json', 
+        'signature': process.env.SIGNATURE
+    };
+
+    if (params.param) headers.param = params.param;
+    return this.http.get(process.env.API_URL + '/article', { headers: headers })
+    .pipe(map((res) => {
+        return res.data;
+    })).toPromise();
+  }
+
 
 
 }

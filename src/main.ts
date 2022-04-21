@@ -22,7 +22,15 @@ async function bootstrap() {
   app.useStaticAssets(viewsPath);
 
   app.engine('.hbs', exphbs.engine({ 
-    extname: '.hbs', defaultLayout: 'main' 
+    extname: '.hbs', defaultLayout: 'main',
+    helpers: {
+      ifEquals: function (a, b, options) {
+        if (a === b) {
+          return options.fn(this);
+        }    
+        return options.inverse(this);
+       },
+      } 
   }));
   app.set('views', viewsPath);
   app.set('view engine', '.hbs');

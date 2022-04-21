@@ -15,7 +15,6 @@
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
-                {{!-- <p>Want to get in touch? Fill out the form below to send me a message and I will get back to you as soon as possible!</p> --}}
                 <div class="my-5">
                     <form id="signinForm" method="post" action="{{ host }}/signin">
                         <div class="form-floating">
@@ -38,7 +37,7 @@
                         </div>
                         <div class="d-none" id="submitErrorMessage"><div class="text-center p-3 mb-2 bg-danger text-white">{{ err.responseMessage }}</div></div>
                         <!-- Submit Button-->
-                        <button class="btn btn-primary text-uppercase spinner" id="submitButton" type="submit">Submit</button>
+                        <button class="btn btn-primary text-uppercase spinner" id="submitButton" type="submit">Sign in</button>
                     </form>                    
                     {{!-- <form id="siginForm" data-sb-form-api-token="API_TOKEN" method="post" action="{{ host }}/signin">
                         <div class="form-floating">

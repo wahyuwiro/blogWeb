@@ -12,23 +12,28 @@ export class AppController {
 
   @Get()
   @Render('home/home')
-  async getHome(@Request() req,@Res() res: Response) {
-    // var gh: any = {}
-    // gh = await this.appService.getHome({});
-    // console.log('gh.results =>',gh.results);
-    return { 
-      host : process.env.HOST + ':' + process.env.PORT,
-      // data: gh.results,
-    };
+  async getArticle(@Request() req,@Res() res: Response) {
+    var result: any = {}, message: any = {}
+    result = await this.appService.getArticle({});
+    console.log('gh.results =>',result);
+    message.host = process.env.HOST + ':' + process.env.PORT;
+    if(result.responseCode == 200) {
+      message.data = result.data;
+    }else if(result.responseCode == 404) {
+    }else{
+        message.err = result;
+    }
+    return message;
+
   }  
 
-  @Get('signup')
-  // @Render('sign/signup')
-  async getSignup(@Request() req,@Res() res: Response) {
-    return { 
-      host : process.env.HOST + ':' + process.env.PORT,
-    };
-  }
+  // @Get('signup')
+  // // @Render('sign/signup')
+  // async getSignup(@Request() req,@Res() res: Response) {
+  //   return { 
+  //     host : process.env.HOST + ':' + process.env.PORT,
+  //   };
+  // }
 
 //   async logout(p) {
 //     var key = 'key';

@@ -19,20 +19,19 @@
                         </div>
                     </div>
                     <div class="alert alert-danger" style="display:none"></div>
-                    <form name="frm" class="px-3" method="post" action="{{ host }}/blog">
+                    <form name="frm" class="px-3" method="post" action="{{ host }}/blog/edit/{{ data._id }}">
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-12">
                                     <label><Title></Title></label>
-                                    <input type="text" class="form-control" name="title" id="title" value="" />
+                                    <input type="text" class="form-control" name="title" id="title" value="{{ data.title }}" />
                                 </div>
                             </div>
 
                         </div>
                         <div class="form-group">
-                            <label>Content</label>&nbsp;<label id="divNote"
-                                class="d-none bg-warning text-white px-2 font-italic small">Note</label>
-                            <textarea name="content" id="content" class="form-control" rows="7"></textarea>
+                            <label>Content</label>&nbsp;
+                            <textarea name="content" id="content" class="form-control" rows="7">{{ data.content }}</textarea>
                         </div>
                         <div class="form-group">
                             <div class="row">
@@ -40,15 +39,16 @@
                                     <label>Status</label>
                                     <select name="status" id="status" class="form-control">
                                         <option value="" selected hidden>Select...</option>
-                                        <option value="Draff">Draff</option>
-                                        <option value="Publish">Publish</option>
+                                        {{#each blogStatus}}
+                                            <option value="{{ this }}" {{#ifEquals this ../data.status }}selected{{/ifEquals}}>{{ this }}</option>
+                                        {{/each}}
                                     </select>
                                 </div>
                             </div>
 
                         </div>
                         <div class="d-flex w-100 pt-4 px-2">
-                            <button class="btn btn-primary waves-effect spinner" type="submit" id="submitBlog">Save
+                            <button class="btn btn-primary waves-effect spinner" type="submit" id="submitBlog">Update
                                 Blog</button>
                         </div>
                     </form>

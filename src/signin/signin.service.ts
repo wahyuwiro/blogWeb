@@ -14,7 +14,6 @@ export class SigninService {
             'Content-Type': 'application/json', 
             'signature': process.env.SIGNATURE
         };
-        console.log('url =>',process.env.API_URL + '/login');
         return this.http.post(process.env.API_URL + '/login', params, { headers: headers })
         .pipe(map((res) => {
             return res.data;

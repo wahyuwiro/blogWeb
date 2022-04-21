@@ -13,7 +13,7 @@ export class BlogController {
         private readonly SigninController: SigninController,
         @Inject(CACHE_MANAGER) private cacheManager: Cache
     ) { }
-  
+    
     @Get()
     @Render('admin/blog')
     async getBlog(@Request() req,@Res() res: Response) {
@@ -30,6 +30,7 @@ export class BlogController {
             message.host = process.env.HOST + ':' + process.env.PORT;
             if(result.responseCode == 200) {
                 message.data = result.data;
+            }else if(result.responseCode == 404) {
             }else{
                 message.err = result;
             }
@@ -55,6 +56,7 @@ export class BlogController {
             if(ct.responseCode == 200) {
                 return { 
                     host : process.env.HOST + ':' + process.env.PORT,
+                    blogStatus : ['Draff','Publish']
                 };
             }else {
               return { 
@@ -66,7 +68,7 @@ export class BlogController {
     }
   
     @Post()
-    async addNewBlog(@Body() blogDTO: BlogDTO,  @Res() res: Response, @Request() req) {
+    async addNewBlog(@Body() blogDTO: BlogDTO, @Res() res: Response, @Request() req) {
         try{
             var gr: any = {}, ct: any = {}, body: any = {}, result: any = {}, deviceId = '';
             console.log('blogDTO =>',blogDTO)
@@ -80,16 +82,15 @@ export class BlogController {
                 if(ct.responseCode == 200) {
                     body = blogDTO;
                     body.token = gr.token;
-                    result = await this.BlogService.blogPost(body);
+                    result = await this.BlogService.addBlog(body);
                     console.log('blogPost =>',result);
                     if(result.responseCode == 200) {
                         res.redirect(process.env.HOST + ':' + process.env.PORT+'/blog');
                     }else{
-                        delete body.token
                         return res.render('admin/addBlog', { 
                             host : process.env.HOST + ':' + process.env.PORT,
                             err : result.responseMessage,
-                            data: body
+                            data: blogDTO
                         });  
                     }
                 }else {
@@ -107,9 +108,91 @@ export class BlogController {
             });
         }
     }
-    @Get(':id')
+    @Get('edit/:id')
     @Render('admin/editBlog')
-    async EditLink(@Param('id') id, @Request() req, @Res() res: Response){
+    async editBlog(@Param('id') id, @Request() req, @Res() res: Response){
+        try {
+            console.log('id =>',id)
+            var gr: any = {}, ct: any = {}, result: any = {}, message: any = {}, deviceId = '';
+            if(req.cookies.deviceId) deviceId=req.cookies.deviceId
+            gr = await this.SigninController.getRedis('key-'+deviceId);
+            if(!gr) {
+              res.redirect(process.env.HOST + ':' + process.env.PORT);
+            }else{
+                ct = await this.SigninController.checkToken(gr);
+                if(ct.responseCode == 200) {
+                    var p: any = {}, param: any = {};
+                    p.id=id
+                    param.token=gr.token;
+                    param.param = JSON.stringify(p); 
+                    result = await this.BlogService.getBlog(param);
+                    console.log('getEditBlog =>',result);
+                    message.host = process.env.HOST + ':' + process.env.PORT;
+                    message.blogStatus = ['Draff','Publish'];
+                    if(result.responseCode == 200) {
+                        message.data = result.data[0];
+                    }else if(result.responseCode == 404) {
+                    }else{
+                        message.err = result;
+                    }
+                    return message;
+                }else {
+                    return { 
+                        host : process.env.HOST + ':' + process.env.PORT,
+                        err : ct
+                    };
+                }
+            }            
+        } catch (error) {
+            console.log('error =>',error)
+        }
+    }
+
+    @Post('edit/:id')
+    async updateBlog(@Param('id') id, @Body() blogDTO: BlogDTO, @Request() req, @Res() res: Response){
+        try {
+            console.log('updateBlog =>',id)
+            var gr: any = {}, ct: any = {}, result: any = {}, body: any = {}, message: any = {}, deviceId = '';
+
+            if(req.cookies.deviceId) deviceId=req.cookies.deviceId
+            gr = await this.SigninController.getRedis('key-'+deviceId);
+            console.log('getRedis =>',gr)
+            if(!gr) {
+                res.redirect(process.env.HOST + ':' + process.env.PORT);
+            }else{
+                ct = await this.SigninController.checkToken(gr);
+                if(ct.responseCode == 200) {
+                    body = blogDTO
+                    body.token = gr.token;
+                    body.id = id;
+                    console.log('updateBlog body =>',body)
+    
+                    result = await this.BlogService.updateBlog(body);
+                    console.log('blogPost =>',result);
+                    if(result.responseCode == 200) {
+                        res.redirect(process.env.HOST + ':' + process.env.PORT+'/blog');
+                    }else{
+                        return res.render('admin/addBlog', { 
+                            host : process.env.HOST + ':' + process.env.PORT,
+                            err : result.responseMessage,
+                            data: blogDTO
+                        });  
+                    }
+
+                }else {
+                    return { 
+                        host : process.env.HOST + ':' + process.env.PORT,
+                        err : ct
+                    };
+                }
+            }            
+        } catch (error) {
+            console.log('error =>',error)
+        }
+    }
+
+    @Get('delete/:id')
+    async deleteBlog(@Param('id') id, @Request() req, @Res() res: Response){
         try {
             console.log('id =>',id)
             var gr: any = {}, ct: any = {}, result: any = {}, message: any = {}, deviceId = '';
@@ -120,15 +203,26 @@ export class BlogController {
             }else{
               ct = await this.SigninController.checkToken(gr);
               if(ct.responseCode == 200) {
-                  result = await this.BlogService.getBlog(gr);
-                  console.log('getEditBlog =>',result);
+                  var p: any = {}, param: any = {};
+                  p.id=id
+                  param.token=gr.token;
+                  param.param = JSON.stringify(p); 
+                  result = await this.BlogService.deleteBlog(param);
+                  console.log('deleteBlog =>',result);
                   message.host = process.env.HOST + ':' + process.env.PORT;
+                  message.blogStatus = ['Draff','Publish'];
                   if(result.responseCode == 200) {
-                      message.data = result.data;
+                      res.redirect(process.env.HOST + ':' + process.env.PORT + '/blog');
                   }else{
                       message.err = result;
+                      result = await this.BlogService.getBlog(gr);
+                      message.host = process.env.HOST + ':' + process.env.PORT;
+                      if(result.responseCode == 200) {
+                          message.data = result.data;
+                      }
+                      return res.render('admin/blog', message);
+          
                   }
-                  return message;
               }else {
                   return { 
                       host : process.env.HOST + ':' + process.env.PORT,
@@ -139,6 +233,5 @@ export class BlogController {
         } catch (error) {
             console.log('error =>',error)
         }
-    }
-
+    }    
 }

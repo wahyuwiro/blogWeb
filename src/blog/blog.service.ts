@@ -11,19 +11,20 @@ export class BlogService {
     ) {}
 
     async getBlog(params: any): Promise < Observable < AxiosResponse < any >>> {
-        console.log('params =>',params)
-        var headers = {
+        var headers: any = {};
+        headers = {
             'Content-Type': 'application/json', 
             'token': params.token
         };
+
+        if (params.param) headers.param = params.param;
         return this.http.get(process.env.API_URL + '/blog', { headers: headers })
         .pipe(map((res) => {
             return res.data;
         })).toPromise();
     }
 
-    async blogPost(params: any): Promise < Observable < AxiosResponse < any >>> {
-        console.log('params =>',params)
+    async addBlog(params: any): Promise < Observable < AxiosResponse < any >>> {
         var headers = {
             'Content-Type': 'application/json', 
             'token': params.token
@@ -34,4 +35,28 @@ export class BlogService {
         })).toPromise();
     }
 
+    async updateBlog(params: any): Promise < Observable < AxiosResponse < any >>> {
+        console.log('updateBlog params =>',params)
+        var headers = {
+            'Content-Type': 'application/json', 
+            'token': params.token
+        };
+        return this.http.put(process.env.API_URL + '/blog', params, { headers: headers })
+        .pipe(map((res) => {
+            return res.data;
+        })).toPromise();
+    }
+
+    async deleteBlog(params: any): Promise < Observable < AxiosResponse < any >>> {
+        console.log('updateBlog params =>',params)
+        var headers = {
+            'Content-Type': 'application/json', 
+            'token': params.token,
+            'param': params.param
+        };
+        return this.http.delete(process.env.API_URL + '/blog', { headers: headers })
+        .pipe(map((res) => {
+            return res.data;
+        })).toPromise();
+    }
 }

@@ -4,7 +4,6 @@ import { SigninService } from './signin.service';
 import { signinDTO } from './dto/signin.dto';
 import { Cache } from 'cache-manager';
 
-
 @Controller('signin')
 export class SigninController {
   constructor(
@@ -22,24 +21,29 @@ export class SigninController {
 
   @Post()
   async postSignin(@Body() signinDTO: signinDTO, @Request() req,@Res() res: Response) {
-    var result: any = {}, body: any = {};
+    var result: any = {}, body: any = {}, key: any = {}, deviceId = '';
     body = signinDTO;
     if(req.cookies.deviceId) { 
-      body.deviceId = req.cookies.deviceId; 
+      deviceId = req.cookies.deviceId; 
     }else{
-      body.deviceId = await this.randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+      deviceId = await this.randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+      res.cookie('deviceId',deviceId); // set cookie
     }
     console.log('siginPost body =>',body)
     result = await this.SigninService.siginPost(body);
     console.log('siginPost result =>',result)
     if(result.responseCode == 200) {
+      key.token = result.data.token
+      await this.addRedis('key-'+deviceId, key);
       res.redirect(process.env.HOST + ':' + process.env.PORT);
-      // await this.addRedis('key-'+body.deviceId, myKey);
     }else{
-      return { 
+      return res.render('sign/signin',
+      { 
         host : process.env.HOST + ':' + process.env.PORT,
+        data: body,
         err: result.responseMessage
-      };
+      },
+  );          
     }  
 
   }

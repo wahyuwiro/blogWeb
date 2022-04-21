@@ -19,7 +19,7 @@
                 <div class="my-5">
                     <form id="signinForm" method="post" action="{{ host }}/signin">
                         <div class="form-floating">
-                            <input class="form-control" id="email" name="email" type="email" placeholder="Enter your email..." data-sb-validations="required,email" />
+                            <input class="form-control" id="email" name="email" type="email" placeholder="Enter your email..." data-sb-validations="required,email" value="{{ data.email }}" />
                             <label for="email">Email address</label>
                             <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
                             <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
@@ -36,7 +36,8 @@
                                 To activate this form, sign up at
                             </div>
                         </div>
-                        <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">{{ err }}</div></div>
+                        <input type="hidden" id="txtWarning" value="{{ err }}">
+                        <div class="d-none" id="submitErrorMessage"><div class="text-center p-3 mb-2 bg-danger text-white">{{ err }}</div></div>
                         <!-- Submit Button-->
                         <button class="btn btn-primary text-uppercase spinner" id="submitButton" type="submit">Submit</button>
                     </form>                    
@@ -72,5 +73,7 @@
 <script>
     $(document).ready(function () {
         spinner.hide();
+        var err = document.getElementById('txtWarning').value
+        if (err.length>5) document.getElementById('submitErrorMessage').classList.remove('d-none')
     })
 </script>

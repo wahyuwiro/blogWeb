@@ -3,9 +3,6 @@ import { Response } from 'express';
 import { AppService } from './app.service';
 import { dataDTO } from './dto/data.dto';
 import { Cache } from 'cache-manager';
-
-const menu = require("../json/menu.json");
-
 @Controller()
 export class AppController {
   constructor(
@@ -25,14 +22,6 @@ export class AppController {
     };
   }  
 
-  @Get('profile')
-  @Render('profile/profile')
-  async getProfile(@Request() req,@Res() res: Response) {
-    return { 
-      host : process.env.HOST + ':' + process.env.PORT,
-    };
-  }
-
   @Get('signup')
   // @Render('sign/signup')
   async getSignup(@Request() req,@Res() res: Response) {
@@ -41,6 +30,16 @@ export class AppController {
     };
   }
 
+//   async logout(p) {
+//     var key = 'key';
+//     if(p.deviceId) {key = key+'-'+p.deviceId}
+//     var gr = await this.getRedis(key);
+//     console.log('getRedis =>',gr)
+//     if(gr){
+//         console.log('delRedis')
+//         await this.delRedis(key);
+//     }
+// }
   // @Get('top-rated')
   // @Render('home/home')
   // async getTopRated(@Request() req, @Res() res: Response ){

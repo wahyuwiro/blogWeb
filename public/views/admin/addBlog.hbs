@@ -1,0 +1,58 @@
+{{>admin-sidebar}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.1/tinymce.min.js" integrity="sha512-WVGmm/5lH0QUFrXEtY8U9ypKFDqmJM3OIB9LlyMAoEOsq+xUs46jGkvSZXpQF7dlU24KRXDsUQhQVY+InRbncA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- Main Content -->
+<div id="content">
+    {{>admin-nav}}
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Blog</h1>
+
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="container container--wide p-0 my-5">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="title-page m-0 py-3"><strong>New Blog</strong></h4>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" style="display:none"></div>
+                    <form name="frm" class="px-3" method="post" action="{{ host }}/blog">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label><Title></Title></label>
+                                    <input type="text" class="form-control" name="title" id="title" value="" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label>Content</label>&nbsp;<label id="divNote"
+                                class="d-none bg-warning text-white px-2 font-italic small">Note</label>
+                            <textarea name="content" id="content" class="form-control" rows="7"></textarea>
+                        </div>
+
+                        <div class="d-flex w-100 pt-4 px-2">
+                            <button class="btn btn-primary waves-effect" type="button" id="submitMarketingTool">Save
+                                Blog</button>
+                        </div>
+                    </form>
+                    <div class="btn btn-outline-success w-100 ml-0" style="display:none"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+<script>
+    tinymce.init({
+        selector: 'textarea'
+    });
+</script>
+{{>admin-footer}}

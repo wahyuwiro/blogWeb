@@ -6,7 +6,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Simple Blog - Quadrant Practical Test </title>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="{{ host }}/assets/favicon.ico" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -17,27 +17,74 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet" />
-    <link href="./main.css" rel="stylesheet" />
+    <link href="{{ host }}/css/styles.css" rel="stylesheet" />
+    <link href="{{ host }}//main.css" rel="stylesheet" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <style>
       .panel-collapse {
         margin: 0 -1rem;
         background: #E9E9E9;
       }
+
     </style>
   </head>
   {{ viewsPath }}
   <div id="loader"></div>
+  <input type="hidden" id="txtCode" value="{{ err.responseCode }}">
+  <input type="hidden" id="txtWarning" value="{{ err.responseMessage }}">
+  <input type="hidden" id="txtRedirect" value="{{ redirect }}">
   <body class="" id="__next">
+    {{!-- <div class="d-flex">
+        <div class="alert alert-danger ml-auto" id="danger-alert">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>Warning! </strong> Product have added to your wishlist.
+        </div>
+    </div> --}}
+
     {{{ body }}}
   </body>
   <script>
     var spinner = $('#loader');
     $(document).ready(function () {
-        $('.spinner').click(function(e) {
-          spinner.show();
-        })
+      $('.spinner').click(function(e) {
+        spinner.show();
+      })
+      /*
+      $("#danger-alert").fadeTo(2000, 500).slideUp(500, function(){
+        $("#danger-alert").slideUp(500);
+      });
+      */
+      var txt = document.getElementById('txtWarning').value;
+      var code = document.getElementById('txtCode').value;
+      if(txt != ""){
+        bootbox.confirm({
+          title: "Information",
+          message: txt,
+          centerVertical: true,
+          closeButton: false,
+          animate: true,
+          className: "my-notif",            
+          buttons: {
+            confirm: {
+              label: 'Ok',
+              className: 'btn-danger w-25 m-auto'
+            },
+            cancel: {
+              label: 'Back',
+              className: 'btn-default d-none'
+            }
+          },
+          callback: function (result) {
+            console.log('This was logged in the callback: ' + result);
+            if(code=='401') window.location.href = "{{ host }}/signin";
+          }
+        });
+      }
+      
+
     });    
 
   </script>

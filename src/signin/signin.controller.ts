@@ -24,7 +24,7 @@ export class SigninController {
     var result: any = {}, body: any = {}, key: any = {}, deviceId = '';
     body = signinDTO;
     if(req.cookies.deviceId) { 
-      deviceId = req.cookies.deviceId; 
+      deviceId = req.cookies.deviceId;
     }else{
       deviceId = await this.randomString(16, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
       res.cookie('deviceId',deviceId); // set cookie
@@ -35,17 +35,32 @@ export class SigninController {
     if(result.responseCode == 200) {
       key.token = result.data.token
       await this.addRedis('key-'+deviceId, key);
-      res.redirect(process.env.HOST + ':' + process.env.PORT);
+      res.redirect(process.env.HOST + ':' + process.env.PORT + '/blog');
     }else{
       return res.render('sign/signin',
-      { 
-        host : process.env.HOST + ':' + process.env.PORT,
-        data: body,
-        err: result.responseMessage
-      },
-  );          
-    }  
+        { 
+          host : process.env.HOST + ':' + process.env.PORT,
+          data : body,
+          err : result
+        },
+      );          
+    }
+  }
 
+  @Get('out')
+  async getSignout(@Request() req,@Res() res: Response) {
+    var deviceId = req.cookies.deviceId;
+    var gr = await this.getRedis('key-'+deviceId);
+    if(gr){
+      await this.delRedis('key-'+deviceId);
+      res.redirect(process.env.HOST + ':' + process.env.PORT); 
+    }
+  }
+
+  async checkToken(token) {
+    var ct: any={};
+    ct = await this.SigninService.checkToken(token);
+    return ct
   }
 
   async getRedis(key) {

@@ -36,8 +36,7 @@
                                 To activate this form, sign up at
                             </div>
                         </div>
-                        <input type="hidden" id="txtWarning" value="{{ err }}">
-                        <div class="d-none" id="submitErrorMessage"><div class="text-center p-3 mb-2 bg-danger text-white">{{ err }}</div></div>
+                        <div class="d-none" id="submitErrorMessage"><div class="text-center p-3 mb-2 bg-danger text-white">{{ err.responseMessage }}</div></div>
                         <!-- Submit Button-->
                         <button class="btn btn-primary text-uppercase spinner" id="submitButton" type="submit">Submit</button>
                     </form>                    

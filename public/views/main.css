@@ -20,3 +20,85 @@ header a, header a:hover {
   background: #000000bf url(/images/spinner.gif) no-repeat center center;
   z-index: 10000;
 }
+
+/* #myModal .modal-header {
+  border:none;
+  padding:0;
+  z-index: 999;
+}
+#myModal .modal-content {
+    width: 95%;
+    margin: 0 auto;
+}
+#myModal .modal-header .close {
+    opacity: 1;
+    margin: -1rem -1rem -1rem auto;    
+    border-radius: 10%;
+    padding: .3rem .5rem;
+}
+#myModal .modal-header .close:focus{
+  outline: none;
+}
+#myModal .modal-header .close img:focus{
+  outline: none;
+}
+
+#myModal .modal-header .close img {
+    max-width: 25px;
+}
+#myModal .modal-dialog {
+    min-height: calc(100vh - 60px);
+    min-height: calc(100vh - 30px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: auto;
+    @media(max-width: 768px) {
+    min-height: calc(100vh - 20px);
+    }
+}
+.modal.show .modal-dialog {
+  margin: 0 auto;
+}
+.my-notif .modal-dialog, .my-notif-ok .modal-dialog {
+  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 30px);
+  margin: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: auto;
+  @media(max-width: 768px) {
+  min-height: calc(100vh - 20px);
+  }
+}
+.my-notif .modal-title, .my-notif-ok .modal-title {
+  font-size: 18px;
+  text-align: center;
+  width: 100%;
+}
+.my-notif .modal-header, .my-notif-ok .modal-header {
+  padding-bottom: 0;
+  padding-top: 2.5rem;
+  border-bottom: none;
+}
+.my-notif .modal-body, .my-notif-ok .modal-body {
+    text-align: center;
+    font-size: 14px;
+    padding: 1rem 2rem;
+    padding-bottom: 1.5rem;
+}
+.my-notif .modal-footer {
+  padding: 0;
+}
+.my-notif .modal-footer .btn, .my-notif-ok .modal-footer .btn {
+  width: 50%;
+  margin: 0;
+  border-radius: 0;
+}
+.my-notif .modal-footer button:first-child {
+  border-right: 1px solid #dee2e6;
+}
+.my-notif-ok .modal-footer{
+  border-top: none;
+} */

@@ -13,7 +13,7 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
-  async getArticle(params: any): Promise < Observable < AxiosResponse < any >>> {
+  async getData(params: any): Promise < Observable < AxiosResponse < any >>> {
     var headers: any = {};
     headers = {
         'Content-Type': 'application/json', 
@@ -21,7 +21,8 @@ export class AppService {
     };
 
     if (params.param) headers.param = params.param;
-    return this.http.get(process.env.API_URL + '/article', { headers: headers })
+    // console.log('param=>',params)
+    return this.http.get(process.env.API_URL + '/' + params.url, { headers: headers })
     .pipe(map((res) => {
         return res.data;
     })).toPromise();

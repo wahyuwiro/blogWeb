@@ -30,7 +30,17 @@ async function bootstrap() {
         }    
         return options.inverse(this);
        },
-      } 
+       trimString: function(passedString) {
+        var theString = passedString.substring(0,150);
+        return theString
+      },
+      stripScripts: function(param) {
+        var regex = /(<([^>]+)>)/ig
+        var r = param.replace(regex, "");
+        r.replace(/<[^>]*(>|$)|&nbsp;|&zwnj;|&raquo;|&laquo;|&gt;/g, ' ');
+        return r;
+      }
+    } 
   }));
   app.set('views', viewsPath);
   app.set('view engine', '.hbs');

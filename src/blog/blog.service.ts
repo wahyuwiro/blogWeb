@@ -59,4 +59,30 @@ export class BlogService {
             return res.data;
         })).toPromise();
     }
+    async addBlogComment(params: any): Promise < Observable < AxiosResponse < any >>> {
+        var headers = {
+            'Content-Type': 'application/json', 
+            'signature': process.env.SIGNATURE
+        };
+        console.log('addBlogComment params =>',params)
+        return this.http.post(process.env.API_URL + '/blogComment', params, { headers: headers })
+        .pipe(map((res) => {
+            console.log('addBlogComment res.data =>',res.data)
+            return res.data;
+        })).toPromise();
+    }
+    async getBlogComment(params: any): Promise < Observable < AxiosResponse < any >>> {
+        var headers: any = {};
+        headers = {
+            'Content-Type': 'application/json', 
+            'signature': process.env.SIGNATURE
+        };
+
+        if (params.param) headers.param = params.param;
+        return this.http.get(process.env.API_URL + '/blogComment', { headers: headers })
+        .pipe(map((res) => {
+            return res.data;
+        })).toPromise();
+    }    
+
 }

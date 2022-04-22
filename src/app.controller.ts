@@ -13,8 +13,9 @@ export class AppController {
   @Get()
   @Render('home/home')
   async getArticle(@Request() req,@Res() res: Response) {
-    var result: any = {}, message: any = {}
-    result = await this.appService.getArticle({});
+    var result: any = {}, message: any = {}, param: any = {};
+    param.url = 'article'
+    result = await this.appService.getData(param);
     console.log('gh.results =>',result);
     message.host = process.env.HOST + ':' + process.env.PORT;
     if(result.responseCode == 200) {
@@ -24,51 +25,36 @@ export class AppController {
         message.err = result;
     }
     return message;
+  }
 
-  }  
+  @Get('article/:id')
+  @Render('home/article')
+  async getDetailArticle(@Param('id') id, @Request() req,@Res() res: Response) {
+    var result: any = {}, gc: any = {}, message: any = {}, p: any = {}, param: any = {};
+    p.id=id
+    param.param = JSON.stringify(p);
+    param.url = 'article'
 
-  // @Get('signup')
-  // // @Render('sign/signup')
-  // async getSignup(@Request() req,@Res() res: Response) {
-  //   return { 
-  //     host : process.env.HOST + ':' + process.env.PORT,
-  //   };
-  // }
-
-//   async logout(p) {
-//     var key = 'key';
-//     if(p.deviceId) {key = key+'-'+p.deviceId}
-//     var gr = await this.getRedis(key);
-//     console.log('getRedis =>',gr)
-//     if(gr){
-//         console.log('delRedis')
-//         await this.delRedis(key);
-//     }
-// }
-  // @Get('top-rated')
-  // @Render('home/home')
-  // async getTopRated(@Request() req, @Res() res: Response ){
-  //   var gd: any = {}
-  //   gd = await this.appService.getTopRated({});
-  //   // console.log('getTopRated new =>',gd)
-  //   return {
-  //     host : process.env.HOST + ':' + process.env.PORT,
-  //     menu: menu.menus,
-  //     data: gd.results,
-  //   };
-  // }
-
-  // @Get('genre/:id')
-  // @Render('home/home')
-  // async getGenre(@Param('id') id, @Request() req, @Res() res: Response ){
-  //   var gd: any = {}
-  //   gd = await this.appService.getGenre({id: id});
-  //   // console.log('getGenre new =>',gd)
-  //   return {
-  //     host : process.env.HOST + ':' + process.env.PORT,
-  //     menu: menu.menus,
-  //     data: gd.results,
-  //   };
-  // }
+    result = await this.appService.getData(param);
+    // console.log('getArticle =>',result);
+    p = {};
+    p.blogId=id
+    param.param = JSON.stringify(p);
+    param.url = 'blogComment'
+    gc = await this.appService.getData(param);
+    message.qtyComment = 0;
+    message.host = process.env.HOST + ':' + process.env.PORT;
+    if(result.responseCode == 200) {
+      message.data = result.data[0];
+      if(gc.responseCode == 200) { // get cooment
+        message.comment = gc.data
+        message.qtyComment = gc.data.length
+      }
+    }else if(result.responseCode == 404) {
+    }else{
+        message.err = result;
+    }
+    return message;
+  }
 
 }

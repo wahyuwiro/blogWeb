@@ -24,12 +24,14 @@ export class BlogController {
         res.redirect(process.env.HOST + ':' + process.env.PORT);
       }else{
         ct = await this.SigninController.checkToken(gr);
+        console.log('checkToken =>',ct)
         if(ct.responseCode == 200) {
             result = await this.BlogService.getBlog(gr);
             // console.log('getBlog =>',result);
             message.host = process.env.HOST + ':' + process.env.PORT;
             if(result.responseCode == 200) {
                 message.data = result.data;
+                message.profile = ct.data;
             }else if(result.responseCode == 404) {
             }else{
                 message.err = result;
@@ -101,7 +103,7 @@ export class BlogController {
                 }
             }
         } catch (error) {
-            console.log('error =>',error)
+            console.log('error addNewBlog =>',error)
             return res.render('admin/addBlog',{ 
                 host : process.env.HOST + ':' + process.env.PORT,
                 err : error
@@ -124,7 +126,7 @@ export class BlogController {
                     var p: any = {}, param: any = {};
                     p.id=id
                     param.token=gr.token;
-                    param.param = JSON.stringify(p); 
+                    param.param = JSON.stringify(p);
                     result = await this.BlogService.getBlog(param);
                     console.log('getEditBlog =>',result);
                     message.host = process.env.HOST + ':' + process.env.PORT;
@@ -144,7 +146,7 @@ export class BlogController {
                 }
             }            
         } catch (error) {
-            console.log('error =>',error)
+            console.log('error editBlog =>',error)
         }
     }
 
@@ -187,7 +189,7 @@ export class BlogController {
                 }
             }            
         } catch (error) {
-            console.log('error =>',error)
+            console.log('error updateBlog =>',error)
         }
     }
 
@@ -231,7 +233,42 @@ export class BlogController {
               }
             }            
         } catch (error) {
-            console.log('error =>',error)
+            console.log('error deleteBlog =>',error)
+        }
+    }    
+    @Post('comment')
+    async addBlogComment(@Body() blogDTO: BlogDTO, @Res() res: Response, @Request() req) {
+        try{
+            var gr: any = {}, ct: any = {}, body: any = {}, result: any = {};
+            body = blogDTO;
+            // console.log('blogDTO =>',blogDTO)
+            // body = JSON.parse(body.data);
+            console.log('addBlogComment body =>',body)
+            result = await this.BlogService.addBlogComment(body);
+            console.log('addBlogComment result =>',result);
+            if(result.responseCode == 200) {
+            }else{
+            }
+            var p: any = {}, param: any = {};
+            p.blogId=body.blogId
+            param.param = JSON.stringify(p); 
+
+            gr = await this.BlogService.getBlogComment(param)
+            console.log('getBlogComment =>',{
+                data: gr.data,
+                qtyComment : gr.data.length
+            })
+            return res.render('home/comment', {
+                data: gr.data,
+                qtyComment : gr.data.length
+            } );
+
+        } catch (error) {
+            console.log('error addBlogComment =>',error)
+            // return res.render('admin/addBlog',{ 
+            //     host : process.env.HOST + ':' + process.env.PORT,
+            //     err : error
+            // });
         }
     }    
 }

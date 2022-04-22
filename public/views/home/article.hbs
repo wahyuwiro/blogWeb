@@ -1,0 +1,201 @@
+{{>nav}}
+<header class="masthead" style="background-image: url('{{ host }}/assets/img/home-bg.jpg')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="post-heading">
+                    <h1>{{ data.title }}</h1>
+                    <h2 class="subheading">{{ trimString (stripScripts data.content) }}</h2>
+                    <span class="meta">
+                        Posted by
+                        <a href="#!">{{ data.createdUser.fullname }}</a>
+                        on {{ data.createdAt }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<article class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                {{{ data.content }}}
+
+                <div class="">
+                    <div class="be-comment-block ">
+                        <div id="divComment" class="mb-5">
+                        <h1 class="comments-title">Comments ({{ qtyComment }})</h1>
+                        {{#each comment }}
+                            <div class="be-comment">
+                                <div class="be-comment-content">
+                                    <span class="be-comment-name">
+                                        <a>{{ this.name }} ({{ this.email }})</a>
+                                    </span>
+                                    <span class="be-comment-time">
+                                        <i class="fa fa-clock-o"></i>
+                                        {{ this.createdDate }}
+                                    </span>
+
+                                    <p class="be-comment-text m-0">
+                                        {{ this.comment }}
+                                    </p>
+                                </div>
+                            </div>
+                        {{/each}}
+                        </div>
+
+                        <div class="alert alert-success ml-auto d-none" id="success-alert">
+                            <button type="button" class="close" data-dismiss="alert">x</button>
+                            <strong>Success! </strong> Comment success inserted.
+                        </div>
+                        <form class="form-block" id="frmComment">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group fl_icon">
+                                        <div class="icon"><i class="fa fa-user"></i></div>
+                                        <input type="hidden" id="blogId" name="blogId" value="">
+                                        <input class="form-input" type="text" id="name" name="name" placeholder="Your name">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 fl_icon">
+                                    <div class="form-group fl_icon">
+                                        <div class="icon"><i class="fa fa-envelope-o"></i></div>
+                                        <input class="form-input" type="text" id="email" name="email" placeholder="Your email">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <textarea class="form-input" required="" id="comment" name="comment" placeholder="Your text"></textarea>
+                                    </div>
+                                </div>
+                                {{!-- <a class="btn btn-primary pull-right btnComment">submit</a> --}}
+                                <input class="btn btn-primary pull-right" type="submit" value="Submit" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</article>
+<script>
+    $(document).ready(function () {
+
+    var request;
+    $("#frmComment").submit(function(event){
+        spinner.show();
+        // Prevent default posting of form - put here to work in case of errors
+        event.preventDefault();
+
+        if (request) {
+            request.abort();
+        }
+        // setup some local variables
+        var $form = $(this);
+
+        // Let's select and cache all the fields
+        var $inputs = $form.find("input, select, button, textarea");
+
+        var url = window.location.pathname;
+        var blogId = url.substring(url.lastIndexOf('/') + 1);
+        document.getElementById('blogId').value = blogId
+
+        // Serialize the data in the form
+        var serializedData = $form.serialize();
+        console.log('serializedData =>',serializedData)
+
+        // Let's disable the inputs for the duration of the Ajax request.
+        // Note: we disable elements AFTER the form data has been serialized.
+        // Disabled form elements will not be serialized.
+        $inputs.prop("disabled", true);
+
+        // Fire off the request
+        request = $.ajax({
+            url: "{{ host }}" + "/blog/comment",
+            type: "post",
+            data: serializedData
+        });
+
+        // Callback handler that will be called on success
+        request.done(function (response, textStatus, jqXHR){
+            // Log a message to the console
+            spinner.hide();
+            console.log("Hooray, it worked!");
+            $('#divComment').html(response)
+            document.getElementById('name').value='';
+            document.getElementById('email').value='';
+            document.getElementById('comment').value='';
+            var sa = document.getElementById('success-alert')
+            sa.classList.remove('d-none')
+            $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+                $("#success-alert").slideUp(500);
+            });
+
+        });
+
+        // Callback handler that will be called on failure
+        request.fail(function (jqXHR, textStatus, errorThrown){
+            // Log the error to the console
+            spinner.hide();
+            console.log(
+                "The following error occurred: "+
+                textStatus, errorThrown
+            );
+        });
+
+        // Callback handler that will be called regardless
+        // if the request failed or succeeded
+        request.always(function () {
+            // Reenable the inputs
+            $inputs.prop("disabled", false);
+            $inputs.value='';
+        });
+
+    });      
+    })
+</script>
+<style>
+    .form-group.fl_icon .icon {
+        position: absolute;
+        top: 1px;
+        left: 16px;
+        width: 48px;
+        height: 48px;
+        background: #f6f6f7;
+        color: #b5b8c2;
+        text-align: center;
+        line-height: 50px;
+        -webkit-border-top-left-radius: 2px;
+        -webkit-border-bottom-left-radius: 2px;
+        -moz-border-radius-topleft: 2px;
+        -moz-border-radius-bottomleft: 2px;
+        border-top-left-radius: 2px;
+        border-bottom-left-radius: 2px;
+    }
+
+    .form-group .form-input {
+        font-size: 13px;
+        line-height: 50px;
+        font-weight: 400;
+        color: #b4b7c1;
+        width: 100%;
+        height: 50px;
+        padding-left: 20px;
+        padding-right: 20px;
+        border: 1px solid #edeff2;
+        border-radius: 3px;
+    }
+
+    .form-group.fl_icon .form-input {
+        padding-left: 70px;
+    }
+
+    .form-group textarea.form-input {
+        height: 150px;
+        padding-top: 20px;
+        line-height: 25px;
+    }
+</style>
+{{>footer}}

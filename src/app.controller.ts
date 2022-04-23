@@ -83,4 +83,33 @@ export class AppController {
     return message;
   }
 
+  @Get('article')
+  @Render('home/all')
+  async getAllArticle(@Request() req,@Res() res: Response) {
+    var gr: any = {}, ct: any = {}, result: any = {}, message: any = {}, param: any = {}, deviceId = '';
+    message.host = process.env.HOST + ':' + process.env.PORT;
+    if(req.cookies.deviceId) deviceId=req.cookies.deviceId
+    gr = await this.SigninController.getRedis('key-'+deviceId);
+    if(!gr) {
+      res.redirect(process.env.HOST + ':' + process.env.PORT);
+    }else{
+      ct = await this.SigninController.checkToken(gr);
+      console.log('checkToken =>',ct)
+      if(ct.responseCode == 200) {
+        message.profile = ct.data;        
+      }
+    }
+    param.url = 'article'
+    param.param = JSON.stringify({limit: 'no'})
+    result = await this.appService.getData(param);
+    // console.log('gh.results =>',result);
+    if(result.responseCode == 200) {
+      message.data = result.data;
+    }else if(result.responseCode == 404) {
+    }else{
+        message.err = result;
+    }
+    return message;
+  }
+
 }

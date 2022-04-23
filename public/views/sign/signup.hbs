@@ -16,27 +16,34 @@
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
                 <div class="my-5">
-                    <form id="signupForm" method="post" action="{{ host }}/signup">
+                    {{!-- <form id="signupForm" method="post" action="{{ host }}/signup">
                         <div class="form-floating">
-                            <input class="form-control" id="fullname" name="fullname" value="{{ data.fullname }}" type="text" placeholder="Enter your fullname..." data-sb-validations="required" />
+                            <input class="form-control" id="fullname" name="fullname" value="{{ data.fullname }}"
+                                type="text" placeholder="Enter your fullname..." data-sb-validations="required" />
                             <label for="fullname">Fullname</label>
-                            <div class="invalid-feedback" data-sb-feedback="fullname:required">A fullname is required.</div>
+                            <div class="invalid-feedback" data-sb-feedback="fullname:required">A fullname is required.
+                            </div>
                         </div>
                         <div class="form-floating">
-                            <input class="form-control" id="email" name="email" type="email" value="{{ data.email }}" placeholder="Enter your email..." data-sb-validations="required,email" />
+                            <input class="form-control" id="email" name="email" type="email" value="{{ data.email }}"
+                                placeholder="Enter your email..." data-sb-validations="required,email" />
                             <label for="email">Email address</label>
                             <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
                             <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
                         </div>
                         <div class="form-floating">
-                            <input class="form-control" id="phone" name="phone" type="tel" value="{{ data.phone }}" placeholder="Enter your phone number..." data-sb-validations="required" />
+                            <input class="form-control" id="phone" name="phone" type="tel" value="{{ data.phone }}"
+                                placeholder="Enter your phone number..." data-sb-validations="required" />
                             <label for="phone">Phone Number</label>
-                            <div class="invalid-feedback" data-sb-feedback="phone:required">A phone number is required.</div>
+                            <div class="invalid-feedback" data-sb-feedback="phone:required">A phone number is required.
+                            </div>
                         </div>
                         <div class="form-floating">
-                            <input class="form-control" id="password" name="password" type="password" placeholder="Enter your password..." data-sb-validations="required" />
+                            <input class="form-control" id="password" name="password" type="password"
+                                placeholder="Enter your password..." data-sb-validations="required" />
                             <label for="password">Password</label>
-                            <div class="invalid-feedback" data-sb-feedback="password:required">A password is required.</div>
+                            <div class="invalid-feedback" data-sb-feedback="password:required">A password is required.
+                            </div>
                         </div>
                         <br />
                         <div class="d-none" id="submitSuccessMessage">
@@ -44,8 +51,53 @@
                                 <div class="fw-bolder">Form submission successful!</div>
                             </div>
                         </div>
-                        <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+                        <div class="d-none" id="submitErrorMessage">
+                            <div class="text-center text-danger mb-3">Error sending message!</div>
+                        </div>
                         <button class="btn btn-primary text-uppercase" id="submitButton" type="submit">Sign up</button>
+                    </form> --}}
+
+                    <form class="needs-validation" novalidate method="post" action="{{ host }}/signup">
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <label for="validationCustom01">Fullname</label>
+                                <input type="text" class="form-control" id="validationCustom01" name="fullname" value="{{ data.fullname }}" placeholder="Fullname"
+                                    value="" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <label for="validationCustom02">Email</label>
+                                <input type="email" class="form-control" id="validationCustom02" name="email" type="email" value="{{ data.email }}" placeholder="Email address"
+                                    value="" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <label for="validationCustom03">Phone Number</label>
+                                <input type="tel" pattern=".{9,12}" class="form-control" id="validationCustom03" name="phone" type="tel" value="{{ data.phone }}" placeholder="Mobile" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <label for="validationCustom02">Password</label>
+                                <input type="password" class="form-control" id="validationCustom02" name="password" placeholder="Password"
+                                    value="" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                        </div>                        
+                        <button class="btn btn-primary" type="submit">SIGN UP</button>
                     </form>
 
                 </div>
@@ -53,4 +105,5 @@
         </div>
     </div>
 </main>
+
 {{>footer}}

@@ -29,13 +29,14 @@ export class BlogController {
             result = await this.BlogService.getBlog(gr);
             // console.log('getBlog =>',result);
             message.host = process.env.HOST + ':' + process.env.PORT;
+            message.profile = ct.data;
             if(result.responseCode == 200) {
                 message.data = result.data;
-                message.profile = ct.data;
             }else if(result.responseCode == 404) {
             }else{
                 message.err = result;
             }
+            console.log('message =>',message)
             return message;
         }else {
             return { 
@@ -58,6 +59,7 @@ export class BlogController {
             if(ct.responseCode == 200) {
                 return { 
                     host : process.env.HOST + ':' + process.env.PORT,
+                    profile : ct.data,
                     blogStatus : ['Draff','Publish']
                 };
             }else {
@@ -91,7 +93,8 @@ export class BlogController {
                     }else{
                         return res.render('admin/addBlog', { 
                             host : process.env.HOST + ':' + process.env.PORT,
-                            err : result.responseMessage,
+                            err : result,
+                            profile : ct.data,
                             data: blogDTO
                         });  
                     }
@@ -131,6 +134,7 @@ export class BlogController {
                     console.log('getEditBlog =>',result);
                     message.host = process.env.HOST + ':' + process.env.PORT;
                     message.blogStatus = ['Draff','Publish'];
+                    message.profile = ct.data;
                     if(result.responseCode == 200) {
                         message.data = result.data[0];
                     }else if(result.responseCode == 404) {
@@ -177,6 +181,7 @@ export class BlogController {
                         return res.render('admin/addBlog', { 
                             host : process.env.HOST + ':' + process.env.PORT,
                             err : result.responseMessage,
+                            profile : ct.data,
                             data: blogDTO
                         });  
                     }

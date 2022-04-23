@@ -6,6 +6,9 @@ import { SigninModule } from './signin/signin.module';
 import { BlogModule } from './blog/blog.module';
 import { SignupModule } from './signup/signup.module';
 import * as redisStore from 'cache-manager-redis-store';
+import { SigninService } from './signin/signin.service';
+import { SigninController } from './signin/signin.controller';
+
 @Module({
   imports: [HttpModule, ConfigModule.forRoot(), CacheModule.register({
     store: redisStore,
@@ -13,6 +16,6 @@ import * as redisStore from 'cache-manager-redis-store';
     port: process.env.PORT_REDIS
   }), SigninModule, BlogModule, SignupModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SigninService, SigninController],
 })
 export class AppModule {}

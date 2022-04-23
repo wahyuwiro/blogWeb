@@ -17,7 +17,7 @@
             <!-- Post preview-->
             {{#each data }}
                 <div class="post-preview">
-                    <a href="{{ host }}/article/{{ this._id }}">
+                    <a class="spinner" href="{{ host }}/article/{{ this._id }}">
                         <h2 class="post-title">{{ this.title }}</h2>
                         <h3 class="post-subtitle">{{ trimString (stripScripts this.content) }}</h3>
                     </a>

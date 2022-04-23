@@ -31,4 +31,17 @@ export class SigninService {
         })).toPromise();
     }
 
+    async signOutPost(params: any): Promise < Observable < AxiosResponse < any >>> {
+        var headers = {
+            'Content-Type': 'application/json', 
+            'token': params.token
+        };
+        console.log('headers =>',headers)
+        console.log('url =>',process.env.API_URL + '/logout')
+        return this.http.post(process.env.API_URL + '/logout', params, { headers: headers })
+        .pipe(map((res) => {
+            return res.data;
+        })).toPromise();
+    }    
+
 }

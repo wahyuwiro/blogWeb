@@ -48,12 +48,27 @@ export class SigninController {
   }
 
   @Get('out')
-  async getSignout(@Request() req,@Res() res: Response) {
-    var deviceId = req.cookies.deviceId;
-    var gr = await this.getRedis('key-'+deviceId);
+  async getLogout(@Request() req,@Res() res: Response) {
+    var result: any = {}, gr: any = {}, body: any = {}, key: any = {}, deviceId = '';
+    deviceId = req.cookies.deviceId;
+    gr = await this.getRedis('key-'+deviceId);
+    console.log('getRedis =>',gr);
+    
+    result = await this.SigninService.signOutPost(gr);
+    console.log('signOutPost result =>',result)
+
+    // await this.logout('key-'+deviceId)
+    res.redirect(process.env.HOST + ':' + process.env.PORT);
+
+  }
+  async logout(p) {
+    var key = 'key';
+    if(p.deviceId) {key = key+'-'+p.deviceId}
+    var gr = await this.getRedis(key);
+    console.log('getRedis =>',gr)
     if(gr){
-      await this.delRedis('key-'+deviceId);
-      res.redirect(process.env.HOST + ':' + process.env.PORT); 
+        console.log('delRedis')
+        await this.delRedis(key);
     }
   }
 
